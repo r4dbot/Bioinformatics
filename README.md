@@ -6,7 +6,7 @@ Any copyright of the project belong to the source. This repository only attempt 
 
 # Rosalind
 Rosalind is a platform for learning bioinformatics and programming through problem solving.
-<br>source: http://rosalind.info/problems/dna/
+<br>source: http://rosalind.info/problems/locations/
 
 # Bioinformatics UCSD (BGGN 213, Winter 2021)
 A hands-on introduction to the computer-based analysis of genomic and biomolecular data from the Division of Biological Sciences, UCSD.
