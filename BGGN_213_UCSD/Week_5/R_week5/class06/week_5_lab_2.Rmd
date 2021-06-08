@@ -1,0 +1,152 @@
+---
+title: "week_5_lab_2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### A. Improve this regular R code by abstracting the main activities in your own new function.
+
+```{r}
+#  Can you improve this analysis code?
+df <- data.frame(a=1:10, b=seq(200,400,length=10),c=11:20,d=NA) 
+df$a <- (df$a - min(df$a)) / (max(df$a) - min(df$a))
+df$b <- (df$b - min(df$a)) / (max(df$b) - min(df$b))
+df$c <- (df$c - min(df$c)) / (max(df$c) - min(df$c))
+df$d <- (df$d - min(df$d)) / (max(df$a) - min(df$d)) 
+```
+
+```{r eval=FALSE}
+## Simplify to work with a generic vector named “x” 
+## Note that we call the min() function twice…
+xmin <- min(x)
+x <- (x - xmin) / (max(x) - xmin)
+```
+
+```{r eval=FALSE}
+## Further optimization to use the range() function… 
+rng <- range(x)
+x <- (x - rng[1]) / (rng[2] - rng[1])
+```
+
+```{r}
+# You need a “name”, “arguments” and “body”… 
+rescale <- function(x) {
+ rng <-range(x)
+ (x - rng[1]) / (rng[2] - rng[1])
+}
+# Test on a small example where you know the answer
+rescale(1:10)
+```
+
+```{r}
+df
+```
+
+```{r}
+rescale <- function(x, na.rm=TRUE, plot=FALSE) {
+ if(na.rm) {
+ rng <-range(x, na.rm=na.rm)
+ } else {
+ rng <-range(x)
+ }
+ print("Hello")
+ answer <- (x - rng[1]) / (rng[2] - rng[1])
+ print("is it me you are looking for?")
+ if(plot) { 
+ plot(answer, typ="b", lwd=4) 
+ }
+ print("I can see it in ...")
+}
+```
+
+```{r}
+rescale(df$a, plot = TRUE)
+```
+
+```{r}
+rescale <- function(x, na.rm=TRUE, plot=FALSE) {
+ if(na.rm) {
+ rng <-range(x, na.rm=TRUE)
+ } else {
+ rng <-range(x)
+ }
+ print("Hello")
+ answer <- (x - rng[1]) / (rng[2] - rng[1])
+ print("is it me you are looking for?")
+ if(plot) { 
+ plot(answer, typ="b", lwd=4) 
+ }
+print("I can see it in ...")
+return(answer)
+}
+```
+
+
+```{r}
+rescale(df$a, plot=T)
+```
+
+### B. Next improve the below example code for the analysis of protein drug interactions by abstracting the main activities in your own new function.
+
+```{r}
+# Can you improve this analysis code?
+
+library(bio3d)
+s1 <- read.pdb("C:/Users/User/Bioinformatics/BGGN-213/Week_5/R_week5/class06/4ake.pdb") # kinase with drug
+s3 <- read.pdb("C:/Users/User/Bioinformatics/BGGN-213/Week_5/R_week5/class06/1e4y.pdb") # kinase with drug
+s2 <- read.pdb("C:/Users/User/Bioinformatics/BGGN-213/Week_5/R_week5/class06/1ake.pdb") # kinase no drug
+# s1.chainA <- trim.pdb(s1, chain="A", elety="CA")
+# s2.chainA <- trim.pdb(s2, chain="A", elety="CA")
+# s3.chainA <- trim.pdb(s3, chain="A", elety="CA")
+# s1.b <- s1.chainA$atom$b
+# s2.b <- s2.chainA$atom$b
+# s3.b <- s3.chainA$atom$b
+# plotb3(s1.b, sse=s1.chainA, typ="l", ylab="Bfactor") 
+# plotb3(s2.b, sse=s2.chainA, typ="l", ylab="Bfactor") 
+# plotb3(s3.b, sse=s3.chainA, typ="l", ylab="Bfactor")
+
+```
+
+```{r}
+#' Title
+#'
+#' @param x 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+plot_pdb <- function(x){
+  x.chainA <- trim.pdb(x, chain="A", elety="CA")
+  x.b <- x.chainA$atom$b
+  plotb3(x.b,sse = x.chainA, type = "l", ylab = "Bfactor")}
+```
+
+```{r}
+plot_pdb(s1)
+```
+
+
+```{r}
+plot_pdb(s2)
+```
+
+```{r}
+plot_pdb(s3)
+```
+
+
+<span style = "color:red;"><b>Q1.</b> What type of object is returned from the read.pdb() function?</span>
+<!-- Q1.What type of object is returned from the read.pdb() -->
+
+<font color = "red"><b>Q2.</b> What does the <b>trim.pdb()</b> function do?</font>
+
+<font color = "red"><b>Q3.</b> What input parameter would turn off the marginal black and grey rectangles in the plots and what do they represent in this case? </font>
+
+<font color = "red"><b>Q4.</b> What would be a better plot to compare across the different proteins?  </font>
+
+<font color="red"> <b>Q5.</b> Which proteins are more similar to each other in their B-factor trends. How could you quantify this?</font> <font color = "green"> HINT: try the rbind(), dist() and hclust() functions together with a resulting dendrogram plot. Look up the documentation to see what each of these functions does.</font>
+
