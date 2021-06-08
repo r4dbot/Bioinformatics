@@ -1,0 +1,165 @@
+---
+title: "Week_5_R_function_lab_1"
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+**Q1**. Write a function **grade()** to determine an overall grade from a vector of student homework
+assignment scores dropping the lowest single score. If a student misses a homework (i.e. has an
+**NA** value) this can be used as a score to be potentially dropped. Your final function should be
+adquately explained with code comments and be able to work on an example class gradebook
+such as this one in CSV format: “https://tinyurl.com/gradeinput” [**3pts**]
+
+
+### Example input vectors to start with
+```{r}
+# Example input vectors to start with
+student1 <- c(100, 100, 100, 100, 100, 100, 100, 90)
+student2 <- c(100, NA, 90, 90, 90, 90, 97, 80)
+student3 <- c(90, NA, NA, NA, NA, NA, NA, NA)
+```
+
+```{r}
+student1
+mean(student1)
+min(student1)
+```
+
+To find the position of the smallest value use the `which.min()`
+
+```{r}
+which.min(student1)
+student1[which.min(student1)]
+```
+
+to get everything except the min value 
+```{r}
+student1[-which.min(student1)]
+mean(student1[-which.min(student1)])
+```
+
+```{r}
+student2
+mean(student2, na.rm = TRUE)
+mean(student2[-2])
+```
+
+```{r}
+student3
+mean(student3,na.rm = T)
+mean(student3)
+```
+
+Change the NA values to zero
+use `is.na()` function to identify NA value in the vector
+```{r}
+is.na(student2)
+student2[is.na(student2)]
+
+x<- student3
+student3[is.na(student3)]<-0
+x
+mean(x)
+mean(x[-which.min(x)])
+x[which.min(x)]
+which.min(x)
+
+```
+
+
+### Making the function
+
+```{r}
+#' Title
+#'
+#' @param x 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+grade <- function(x){
+# map NA missing homework values to zero 
+# missing homework scores zero
+  x[is.na(x)] <-0
+#  print(x)
+# print(mean(x)) 
+  # excluding the lowest value score homework
+  print(mean(x[-which.min(x)]))
+}
+
+```
+
+```{r}
+
+grade(student3)
+grade(student2)
+grade(student1)
+```
+
+
+```{r}
+gradebook = read.csv(file ="C:/Users/User/Bioinformatics/BGGN-213/Week_5/R_week5/class06/student_homework (1).csv", row.names = 1)
+# data
+# row.names(data)
+```
+
+```{r}
+apply(gradebook,1,grade)
+```
+
+```{r}
+results<-apply(gradebook, 1, grade)
+sort(results)
+```
+```{r}
+which.max(results) 
+```
+
+```{r}
+hw.ave<-apply(gradebook,2,mean, na.rm=TRUE)
+which.min(hw.ave)
+hw.ave
+```
+```{r}
+hw.med <- apply(gradebook, 2, median, na.rm=T)
+which.min(hw.med)
+hw.med
+```
+Plot the data using `boxplot()`
+
+```{r}
+boxplot(gradebook)
+```
+```{r}
+results
+cor(results,gradebook)
+```
+
+```{r}
+gradebook[is.na(gradebook)]<-0
+gradebook
+apply(gradebook,2,cor, x=results)
+```
+
+
+
+**Q2.** Using your **grade()** function and the supplied [gradebook](https://tinyurl.com/gradeinput), Who is the top scoring student
+overall in the gradebook? [**3pts**]
+
+**Q3.** From your analysis of the gradebook, which homework was toughest on students (i.e. obtained
+the lowest scores overall? [**2pts**]
+
+**Q4.** *Optional Extension:* From your analysis of the gradebook, which homework was most
+predictive of overall score (i.e. highest correlation with average grade score)? [**1pt**]
+
+**Q5.** Make sure you save your Rmarkdown document and can click the **“Knit”** button to generate
+a PDF foramt report without errors. Finally, submit your PDF to gradescope. [**1pt**]
+
+
