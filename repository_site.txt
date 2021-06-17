@@ -4,5 +4,7 @@ http://rosalind.info/problems/locations/
 
 https://bioboot.github.io/bggn213_W21/
 
+https://deepseqanalysis.readthedocs.io/en/latest/course-schedule.html
+
 
 https://angus.readthedocs.io/en/2019/
