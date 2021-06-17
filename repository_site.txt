@@ -6,5 +6,7 @@ https://bioboot.github.io/bggn213_W21/
 
 https://deepseqanalysis.readthedocs.io/en/latest/course-schedule.html
 
+https://qcb.ucla.edu/collaboratory/workshops/
+
 
 https://angus.readthedocs.io/en/2019/
